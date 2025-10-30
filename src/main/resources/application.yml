@@ -1,0 +1,16 @@
+spring:
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+
+    chat:
+      ollama:
+        model: gemma:2b
+
+    embedding:
+      ollama:
+        options:
+          model: nomic-embed-text
+
+    vectorstore:
+      type: memory

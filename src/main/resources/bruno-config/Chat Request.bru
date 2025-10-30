@@ -1,0 +1,23 @@
+meta {
+  name: Chat Request
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/bot/chat
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+  "prompt_message": "What's the name of the first chapter in the book?",
+  "history_id": "1"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
