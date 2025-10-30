@@ -1,8 +1,6 @@
 # Spring AI Chatbot with Ollama
 
-This project is a simple **Spring Boot chatbot** powered by **Ollama** and **Spring AI**, inspired by Baeldung’s tutorial on building ChatGPT-like chatbots. 
-
-It demonstrates how to integrate a local LLM (such as Mistral) with a Spring Boot REST API, as well as how to handle chat sessions and prompt history.
+This project is a simple **Spring Boot chatbot** powered by **Ollama** and **Spring AI**. It demonstrates how to integrate a local LLM (such as Mistral) with RAG using Spring Boot REST API, and how to handle chat sessions and prompt history.
 
 ## Overview
 
@@ -22,7 +20,7 @@ The RAG ingests the book Winnie-the-Pooh (public domain) as sample knowledge bas
 
 ## Setup
 
-1. **Install Ollama**
+Install Ollama
 
 ```bash
 brew install ollama
@@ -39,20 +37,21 @@ ollama run mistral
 ollama pull nomic-embed-text
 ```
 
-**Running the Application in IntelliJ**
+To run the application in IntelliJ, create a new configuration with the folowing:
 
-Create a new configuration file using these settings:
-- Type: Application
-- Main class: dev.fp.aichatbot.Application
+- Type: Application 
+- Main class: dev.fp.aichatbot.Application 
 - JDK: Java 21
 
 ## Testing the Chat Endpoint
 Use Bruno, Postman, or cURL to test the chat API.
 
+Endpoints
+- POST http://localhost:8080/api/bot/chat
+- POST http://localhost:8080/api/bot/chat-rag
+
+Request Body:
 ```JSON
-# POST http://localhost:8080/api/bot/chat
-# POST http://localhost:8080/api/bot/chat-rag        
-# Request Body (JSON):
 {
 "prompt_message": "What's the name of the donkey in Winnie-the-Pooh?",
 "history_id": "1"
@@ -63,7 +62,7 @@ Use Bruno, Postman, or cURL to test the chat API.
 
 ## References
 
-- Winnie-the-Pooh text: [Project Gutenberg](https://www.gutenberg.org/cache/epub/67098/pg67098.txt
+- Winnie-the-Pooh by A. A. Milne, available from [Project Gutenberg](https://www.gutenberg.org/cache/epub/67098/pg67098.txt)
 - [Baeldung: Spring AI Ollama ChatGPT-like Chatbot](https://www.baeldung.com/spring-ai-ollama-chatgpt-like-chatbot)
 - [Infinite Circuits: Building a Simple RAG System in Spring Boot with Ollama](https://www.infinitecircuits.dev/blogs/blog/building-a-simple-rag-system-in-spring-boot-with-ollama-REYhPlHHAcEcMR0mMVYe)
 
