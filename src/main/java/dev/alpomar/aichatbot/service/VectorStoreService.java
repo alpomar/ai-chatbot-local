@@ -1,10 +1,10 @@
-package dev.fp.aichatbot.service;
+package dev.alpomar.aichatbot.service;
 
-import dev.fp.aichatbot.rag.EmbeddingDocumentPreparer;
-import dev.fp.aichatbot.rag.SemanticParser;
+import dev.alpomar.aichatbot.rag.EmbeddingDocumentPreparer;
+import dev.alpomar.aichatbot.rag.SemanticParser;
 import jakarta.annotation.PostConstruct;
-import dev.fp.aichatbot.rag.SemanticChunk;
-import dev.fp.aichatbot.rag.FileManager;
+import dev.alpomar.aichatbot.rag.SemanticChunk;
+import dev.alpomar.aichatbot.rag.FileManager;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;

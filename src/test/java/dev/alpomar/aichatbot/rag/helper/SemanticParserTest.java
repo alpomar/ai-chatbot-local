@@ -1,6 +1,6 @@
-package dev.fp.aichatbot.rag.helper;
+package dev.alpomar.aichatbot.rag.helper;
 
-import dev.fp.aichatbot.rag.SemanticParser;
+import dev.alpomar.aichatbot.rag.SemanticParser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

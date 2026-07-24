@@ -1,8 +1,8 @@
-package dev.fp.aichatbot.controller;
+package dev.alpomar.aichatbot.controller;
 
-import dev.fp.aichatbot.dto.BotRequest;
-import dev.fp.aichatbot.dto.BotResponse;
-import dev.fp.aichatbot.service.VectorStoreService;
+import dev.alpomar.aichatbot.dto.BotRequest;
+import dev.alpomar.aichatbot.dto.BotResponse;
+import dev.alpomar.aichatbot.service.VectorStoreService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.vectorstore.SimpleVectorStore;

@@ -1,4 +1,4 @@
-package dev.fp.aichatbot.rag;
+package dev.alpomar.aichatbot.rag;
 
 import com.vladsch.flexmark.ast.Heading;
 import com.vladsch.flexmark.ast.Paragraph;

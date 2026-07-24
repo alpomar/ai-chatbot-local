@@ -1,6 +1,6 @@
-package dev.fp.aichatbot.service;
+package dev.alpomar.aichatbot.service;
 
-import dev.fp.aichatbot.dto.BotHistory;
+import dev.alpomar.aichatbot.dto.BotHistory;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;

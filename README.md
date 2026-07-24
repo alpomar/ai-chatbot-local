@@ -40,7 +40,7 @@ ollama pull nomic-embed-text
 To run the application in IntelliJ, create a new configuration with the folowing:
 
 - Type: Application 
-- Main class: dev.fp.aichatbot.Application 
+- Main class: dev.alpomar.aichatbot.Application 
 - JDK: Java 21
 
 ## Testing the Chat Endpoint

@@ -1,4 +1,4 @@
-package dev.fp.aichatbot.dto;
+package dev.alpomar.aichatbot.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

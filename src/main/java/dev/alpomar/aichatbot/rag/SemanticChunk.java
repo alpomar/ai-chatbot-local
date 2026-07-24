@@ -1,4 +1,4 @@
-package dev.fp.aichatbot.rag;
+package dev.alpomar.aichatbot.rag;
 
 import java.util.HashMap;
 import java.util.Map;

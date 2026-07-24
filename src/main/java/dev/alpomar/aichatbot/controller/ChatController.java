@@ -1,9 +1,9 @@
-package dev.fp.aichatbot.controller;
+package dev.alpomar.aichatbot.controller;
 
-import dev.fp.aichatbot.dto.BotRequest;
-import dev.fp.aichatbot.dto.BotResponse;
+import dev.alpomar.aichatbot.dto.BotRequest;
+import dev.alpomar.aichatbot.dto.BotResponse;
 
-import dev.fp.aichatbot.service.ChatService;
+import dev.alpomar.aichatbot.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

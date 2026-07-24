@@ -1,4 +1,4 @@
-package dev.fp.aichatbot.rag;
+package dev.alpomar.aichatbot.rag;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.TokenCountEstimator;
