@@ -1,17 +1,17 @@
 # Spring AI Chatbot with Ollama
 
-A companion to my [digital twin](https://alpomar.dev) — where the twin grounds responses via prompt stuffing, this project explores what a RAG pipeline looks like beneath the abstractions.
+A companion to my [digital twin](https://alpomar.dev) - where the twin grounds responses via prompt stuffing, this project explores what a RAG pipeline looks like beneath the abstractions.
 
-A from-scratch Retrieval-Augmented Generation (RAG) pipeline built on **Spring Boot**, **Spring AI**, and **Ollama**, running entirely on local models — no API keys, no cloud inference.
+A from-scratch Retrieval-Augmented Generation (RAG) pipeline built on **Spring Boot**, **Spring AI**, and **Ollama**, running entirely on local models - no API keys, no cloud inference.
 
 Most RAG demos stop at "call the vector store library." This project exists to work through the parts that are usually hidden behind a one-liner: how source documents get split into retrievable units, how chunk size is bounded against a model's context window, and what actually changes in a response when retrieval is added versus removed. The knowledge base is a public-domain text (Winnie-the-Pooh) so the retrieval behavior is easy to verify by hand.
 
 ## What This Demonstrates
 
-- **Heading-aware semantic chunking** — [`SemanticParser`](src/main/java/dev/alpomar/aichatbot/rag/SemanticParser.java) walks a Markdown AST (via flexmark) and splits content at heading boundaries instead of fixed character windows, tagging each chunk with its full heading breadcrumb (e.g. `Chapter 1 > Subchapter 1.11`) so retrieved passages keep their document context.
-- **Token-aware chunk sizing** — [`EmbeddingDocumentPreparer`](src/main/java/dev/alpomar/aichatbot/rag/EmbeddingDocumentPreparer.java) re-packs each semantic chunk sentence-by-sentence up to a configurable token budget, using a real tokenizer (JTokkit) rather than a character-count proxy, so chunks stay within the embedding model's limits without cutting sentences mid-thought.
-- **Local embeddings with a persisted vector store** — chunks are embedded with Ollama's `nomic-embed-text` model into an in-memory [`SimpleVectorStore`](src/main/java/dev/alpomar/aichatbot/service/VectorStoreService.java) that's snapshotted to disk (`vector_store.json`), so re-embedding only happens once, not on every application restart.
-- **Grounded vs. ungrounded chat, side by side** — the app exposes two endpoints against the same underlying model so the effect of retrieval is directly observable: `/api/bot/chat` is a plain multi-turn chatbot with manually managed conversation history, while `/api/bot/chat-rag` wires the vector store into the prompt via Spring AI's `QuestionAnswerAdvisor`.
+- **Heading-aware semantic chunking** - [`SemanticParser`](src/main/java/dev/alpomar/aichatbot/rag/SemanticParser.java) walks a Markdown AST (via flexmark) and splits content at heading boundaries instead of fixed character windows, tagging each chunk with its full heading breadcrumb (e.g. `Chapter 1 > Subchapter 1.11`) so retrieved passages keep their document context.
+- **Token-aware chunk sizing** - [`EmbeddingDocumentPreparer`](src/main/java/dev/alpomar/aichatbot/rag/EmbeddingDocumentPreparer.java) re-packs each semantic chunk sentence-by-sentence up to a configurable token budget, using a real tokenizer (JTokkit) rather than a character-count proxy, so chunks stay within the embedding model's limits without cutting sentences mid-thought.
+- **Local embeddings with a persisted vector store** - chunks are embedded with Ollama's `nomic-embed-text` model into an in-memory [`SimpleVectorStore`](src/main/java/dev/alpomar/aichatbot/service/VectorStoreService.java) that's snapshotted to disk (`vector_store.json`), so re-embedding only happens once, not on every application restart.
+- **Grounded vs. ungrounded chat, side by side** - the app exposes two endpoints against the same underlying model so the effect of retrieval is directly observable: `/api/bot/chat` is a plain multi-turn chatbot with manually managed conversation history, while `/api/bot/chat-rag` wires the vector store into the prompt via Spring AI's `QuestionAnswerAdvisor`.
 
 ## Architecture
 
@@ -31,9 +31,9 @@ POST /api/bot/chat-rag  → QuestionAnswerAdvisor (vector search) + LLM  → gro
 ## Prerequisites
 
 - **Java 21**
-- **Spring Boot** (via Maven — the runtime hosting the Spring AI integration and REST API)
+- **Spring Boot** (via Maven - the runtime hosting the Spring AI integration and REST API)
 - **Ollama** (installed locally)
-- **Bruno** or any API testing tool (e.g., Postman, cURL) — sample requests are in [`docs/bruno-endpoints`](docs/bruno-endpoints)
+- **Bruno** or any API testing tool (e.g., Postman, cURL) - sample requests are in [`docs/bruno-endpoints`](docs/bruno-endpoints)
 
 ## Setup
 
@@ -75,7 +75,7 @@ Use Bruno, Postman, or cURL.
 
 | Endpoint | Behavior |
 |---|---|
-| `POST /api/bot/chat` | Plain chat with the local model, no retrieval — answers come only from the model's own knowledge plus conversation history. |
+| `POST /api/bot/chat` | Plain chat with the local model, no retrieval - answers come only from the model's own knowledge plus conversation history. |
 | `POST /api/bot/chat-rag` | Retrieves relevant chunks from the vector store and injects them into the prompt before calling the model. |
 
 Request body (same shape for both):
@@ -89,7 +89,7 @@ Request body (same shape for both):
 
 `history_id` is a session identifier used to look up prior turns so the bot maintains context across multiple messages.
 
-Try the same prompt against both endpoints — `/chat` will typically be vague or invent an answer, while `/chat-rag` should cite the book's own text (Eeyore), which is the concrete difference RAG is meant to demonstrate.
+Try the same prompt against both endpoints - `/chat` will typically be vague or invent an answer, while `/chat-rag` should cite the book's own text (Eeyore), which is the concrete difference RAG is meant to demonstrate.
 
 ## References
 
