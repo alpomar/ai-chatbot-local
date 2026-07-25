@@ -1,5 +1,7 @@
 # Spring AI Chatbot with Ollama
 
+A companion to my [digital twin](https://alpomar.com) — where the twin grounds responses via prompt stuffing, this project explores what a RAG pipeline looks like beneath the abstractions.
+
 A from-scratch Retrieval-Augmented Generation (RAG) pipeline built on **Spring Boot**, **Spring AI**, and **Ollama**, running entirely on local models — no API keys, no cloud inference.
 
 Most RAG demos stop at "call the vector store library." This project exists to work through the parts that are usually hidden behind a one-liner: how source documents get split into retrievable units, how chunk size is bounded against a model's context window, and what actually changes in a response when retrieval is added versus removed. The knowledge base is a public-domain text (Winnie-the-Pooh) so the retrieval behavior is easy to verify by hand.
