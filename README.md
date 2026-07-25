@@ -1,64 +1,93 @@
 # Spring AI Chatbot with Ollama
 
-This project is a simple **Spring Boot chatbot** powered by **Ollama** and **Spring AI**. It demonstrates how to integrate a local LLM (such as Mistral) with RAG using Spring Boot REST API, and how to handle chat sessions and prompt history.
+A from-scratch Retrieval-Augmented Generation (RAG) pipeline built on **Spring Boot**, **Spring AI**, and **Ollama**, running entirely on local models — no API keys, no cloud inference.
 
-## Overview
+Most RAG demos stop at "call the vector store library." This project exists to work through the parts that are usually hidden behind a one-liner: how source documents get split into retrievable units, how chunk size is bounded against a model's context window, and what actually changes in a response when retrieval is added versus removed. The knowledge base is a public-domain text (Winnie-the-Pooh) so the retrieval behavior is easy to verify by hand.
 
-This application provides a REST endpoint that accepts chat messages and returns model responses using **Ollama** as the local inference server.  
+## What This Demonstrates
 
-It supports multi-turn conversations through a simple **`history_id`** field that represents the chat session ID.
+- **Heading-aware semantic chunking** — [`SemanticParser`](src/main/java/dev/alpomar/aichatbot/rag/SemanticParser.java) walks a Markdown AST (via flexmark) and splits content at heading boundaries instead of fixed character windows, tagging each chunk with its full heading breadcrumb (e.g. `Chapter 1 > Subchapter 1.11`) so retrieved passages keep their document context.
+- **Token-aware chunk sizing** — [`EmbeddingDocumentPreparer`](src/main/java/dev/alpomar/aichatbot/rag/EmbeddingDocumentPreparer.java) re-packs each semantic chunk sentence-by-sentence up to a configurable token budget, using a real tokenizer (JTokkit) rather than a character-count proxy, so chunks stay within the embedding model's limits without cutting sentences mid-thought.
+- **Local embeddings with a persisted vector store** — chunks are embedded with Ollama's `nomic-embed-text` model into an in-memory [`SimpleVectorStore`](src/main/java/dev/alpomar/aichatbot/service/VectorStoreService.java) that's snapshotted to disk (`vector_store.json`), so re-embedding only happens once, not on every application restart.
+- **Grounded vs. ungrounded chat, side by side** — the app exposes two endpoints against the same underlying model so the effect of retrieval is directly observable: `/api/bot/chat` is a plain multi-turn chatbot with manually managed conversation history, while `/api/bot/chat-rag` wires the vector store into the prompt via Spring AI's `QuestionAnswerAdvisor`.
 
-The RAG ingests the book Winnie-the-Pooh (public domain) as sample knowledge base data.
+## Architecture
+
+**Ingestion (once, on startup if no snapshot exists):**
+```
+Markdown file → SemanticParser (heading-scoped chunks)
+             → EmbeddingDocumentPreparer (token-bounded sentence packing)
+             → Ollama (nomic-embed-text) → SimpleVectorStore → vector_store.json
+```
+
+**Query:**
+```
+POST /api/bot/chat      → OllamaChatModel + in-memory history          → response
+POST /api/bot/chat-rag  → QuestionAnswerAdvisor (vector search) + LLM  → grounded response
+```
 
 ## Prerequisites
 
 - **Java 21**
-- **Spring Boot**
+- **Spring Boot** (via Maven — the runtime hosting the Spring AI integration and REST API)
 - **Ollama** (installed locally)
-- **IntelliJ IDEA** (optional, for development)
-- **Bruno** or any API testing tool (e.g., Postman, cURL)
+- **Bruno** or any API testing tool (e.g., Postman, cURL) — sample requests are in [`docs/bruno-endpoints`](docs/bruno-endpoints)
 
 ## Setup
 
-Install Ollama
+Install Ollama:
 
 ```bash
 brew install ollama
 ```
 
-Start the Ollama server
+Start the Ollama server:
+
 ```bash
 ollama serve
 ```
-Run or pull models
+
+Pull the models used by this project (chat model configured in `application.yml`, embedding model used for retrieval):
 
 ```bash
-ollama run mistral
+ollama pull gemma:2b
 ollama pull nomic-embed-text
 ```
 
-To run the application in IntelliJ, create a new configuration with the folowing:
+Run the app:
 
-- Type: Application 
-- Main class: dev.alpomar.aichatbot.Application 
+```bash
+mvn spring-boot:run
+```
+
+Or in IntelliJ, create an Application configuration with:
+
+- Main class: `dev.alpomar.aichatbot.Application`
 - JDK: Java 21
 
-## Testing the Chat Endpoint
-Use Bruno, Postman, or cURL to test the chat API.
+On first run, the app parses, chunks, and embeds `src/main/resources/data/Winnie-the-Pooh (A. A. Milne).md` and writes the resulting vectors to `vector_store.json`. Subsequent runs load that file directly.
 
-Endpoints
-- POST http://localhost:8080/api/bot/chat
-- POST http://localhost:8080/api/bot/chat-rag
+## Testing the Chat Endpoints
 
-Request Body:
-```JSON
+Use Bruno, Postman, or cURL.
+
+| Endpoint | Behavior |
+|---|---|
+| `POST /api/bot/chat` | Plain chat with the local model, no retrieval — answers come only from the model's own knowledge plus conversation history. |
+| `POST /api/bot/chat-rag` | Retrieves relevant chunks from the vector store and injects them into the prompt before calling the model. |
+
+Request body (same shape for both):
+
+```json
 {
-"prompt_message": "What's the name of the donkey in Winnie-the-Pooh?",
-"history_id": "1"
+  "prompt_message": "What's the name of the donkey in Winnie-the-Pooh?",
+  "history_id": "1"
 }
 ```
 
-- The history_id acts as a chat session ID, allowing the chatbot to maintain context across multiple messages.
+`history_id` is a session identifier used to look up prior turns so the bot maintains context across multiple messages.
+
+Try the same prompt against both endpoints — `/chat` will typically be vague or invent an answer, while `/chat-rag` should cite the book's own text (Eeyore), which is the concrete difference RAG is meant to demonstrate.
 
 ## References
 
@@ -67,4 +96,5 @@ Request Body:
 - [Infinite Circuits: Building a Simple RAG System in Spring Boot with Ollama](https://www.infinitecircuits.dev/blogs/blog/building-a-simple-rag-system-in-spring-boot-with-ollama-REYhPlHHAcEcMR0mMVYe)
 
 ## License
+
 This project is distributed under the MIT License. See LICENSE for details.
