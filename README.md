@@ -1,6 +1,6 @@
 # Spring AI Chatbot with Ollama
 
-A companion to my [digital twin](https://alpomar.com) — where the twin grounds responses via prompt stuffing, this project explores what a RAG pipeline looks like beneath the abstractions.
+A companion to my [digital twin](https://alpomar.dev) — where the twin grounds responses via prompt stuffing, this project explores what a RAG pipeline looks like beneath the abstractions.
 
 A from-scratch Retrieval-Augmented Generation (RAG) pipeline built on **Spring Boot**, **Spring AI**, and **Ollama**, running entirely on local models — no API keys, no cloud inference.
 
