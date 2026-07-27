@@ -100,3 +100,6 @@ Try the same prompt against both endpoints - `/chat` will typically be vague or 
 ## License
 
 This project is distributed under the MIT License. See LICENSE for details.
+
+# About the Author
+I'm Filipe Albero Pomar. Engineering manager, sometime product manager, still hands-on with the code. Curious how? More at [alpomar.dev](https://alpomar.dev)
